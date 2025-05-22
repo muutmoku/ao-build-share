@@ -12,18 +12,18 @@ type Props = {
   buildState?: BuildState;
 };
 
-const slots: SlotKey[] = ["head", "armor", "shoes", "mainhand", "offhand", "potion", "food", "mount", "bag"];
+const slots: SlotKey[] = ["head", "armor", "shoes", "mainhand", "offhand", "cape", "potion", "food", "mount", "bag"];
 
 const slotLabels: Record<SlotKey, string> = {
   head: "Head", armor: "Armor", shoes: "Shoes",
-  mainhand: "Main Hand", offhand: "Off Hand",
+  mainhand: "Main Hand", offhand: "Off Hand", cape: "Cape",
   potion: "Potion", food: "Food", mount: "Mount", bag: "Bag"
 };
 
 const BuildPreview: React.FC<Props> = ({ lang, buildState }) => {
   const [itemData, setItemData] = useState<Record<SlotKey, ItemInfo | null>>({
     head: null, armor: null, shoes: null,
-    mainhand: null, offhand: null,
+    mainhand: null, offhand: null, cape: null,
     potion: null, food: null, mount: null, bag: null,
   });
 

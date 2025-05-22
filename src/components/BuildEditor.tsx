@@ -9,6 +9,7 @@ export type SlotKey =
   | "shoes"
   | "mainhand"
   | "offhand"
+  | "cape"
   | "potion"
   | "food"
   | "mount"
@@ -34,6 +35,7 @@ const slots: SlotKey[] = [
   "shoes",
   "mainhand",
   "offhand",
+  "cape",
   "potion",
   "food",
   "mount",
@@ -51,6 +53,8 @@ const defaultBuildSlots: BuildSlots = {
   mainhandEnchant: "",
   offhand: "",
   offhandEnchant: "",
+  cape: "",
+  capeEnchant: "",
   potion: "",
   potionEnchant: "",
   food: "",
@@ -103,6 +107,7 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
     mainhand: {},
     offhand: {},
     potion: {},
+    cape: {},
     food: {},
     mount: {},
     bag: {},
@@ -117,6 +122,7 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
         shoes: {},
         mainhand: {},
         offhand: {},
+        cape: {},
         potion: {},
         food: {},
         mount: {},
