@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, Container, Grid, Box, Button, MenuItem, Menu, Typography } from "@mui/material";
+import { AppBar, Toolbar, Container, Grid, Box, Button, MenuItem, Menu, Typography, IconButton } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import EditIcon from '@mui/icons-material/Edit';
+import EditOffIcon from '@mui/icons-material/EditOff';
 import TranslateIcon from '@mui/icons-material/Translate';
 import BuildEditor, { BuildState } from "./components/BuildEditor";
 import BuildPreview from "./components/BuildPreview";
@@ -25,10 +27,24 @@ const languages = [
 
 const defaultLang = "EN-US";
 
+function getEditorEnabledFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get("editor");
+  if (value === "false") return false;
+  return true;
+}
+
+function getLangFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get("lang");
+  return languages.some(l => l.code === value) ? value : defaultLang;
+}
+
 export default function App() {
-  const [lang, setLang] = useState(defaultLang);
+  const [lang, setLang] = useState(getLangFromURL());
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [buildState, setBuildState] = useState<BuildState | undefined>();
+  const [editorEnabled, setEditorEnabled] = useState(getEditorEnabledFromURL());
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,6 +56,13 @@ export default function App() {
     setAnchorEl(null);
   };
   const current = languages.find(l => l.code === lang) || languages.find(l => l.code === "EN-US");
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("editor", editorEnabled ? "true" : "false");
+    params.set("lang", lang || defaultLang);
+    const newURL = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, '', newURL);
+  }, [editorEnabled, lang]);
   return (
     <>
       <AppBar position="static">
@@ -86,16 +109,28 @@ export default function App() {
           >
             Albion Online Build Share
           </Typography>
-          <Box sx={{ minWidth: 56 }} />
+          <Box sx={{ ml: "auto" }}>
+            <IconButton
+              onClick={() => setEditorEnabled(v => !v)}
+              color="inherit"
+              size="large"
+              sx={{ ml: 1 }}
+              aria-label={editorEnabled ? "Hide editor" : "Show editor"}
+            >
+              {editorEnabled ? <EditIcon /> : <EditOffIcon />}
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <BuildEditor lang={lang} onChange={setBuildState} />
+          <Grid item xs={12} md={6}
+            sx={{ display: editorEnabled ? 'block' : 'none' }}
+          >
+            <BuildEditor lang={lang || defaultLang} onChange={setBuildState} />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <BuildPreview lang={lang} buildState={buildState} />
+          <Grid item xs={12} md={editorEnabled ? 6 : 12}>
+            <BuildPreview lang={lang || defaultLang} buildState={buildState} />
           </Grid>
         </Grid>
       </Container>

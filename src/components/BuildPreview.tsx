@@ -57,7 +57,6 @@ const BuildPreview: React.FC<Props> = ({ lang, buildState }) => {
             const item = itemData[slot];
             const enchant = buildState.slots[`${slot}Enchant`];
             if (!item) return null;
-            // 画像URL
             const itemIdWithEnchant = enchant && enchant !== "0" ? `${item.uniqueName}@${enchant}` : item.uniqueName;
             const imgUrl = `https://render.albiononline.com/v1/item/${itemIdWithEnchant}.png`;
             const localized = item.localizedNames?.[lang] || item.localizedNames?.["EN-US"] || item.uniqueName;
