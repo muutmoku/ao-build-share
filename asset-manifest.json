@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ao-build-share/static/css/main.e6c13ad2.css",
-    "main.js": "/ao-build-share/static/js/main.267e4864.js",
+    "main.js": "/ao-build-share/static/js/main.a2a88453.js",
     "index.html": "/ao-build-share/index.html",
     "main.e6c13ad2.css.map": "/ao-build-share/static/css/main.e6c13ad2.css.map",
-    "main.267e4864.js.map": "/ao-build-share/static/js/main.267e4864.js.map"
+    "main.a2a88453.js.map": "/ao-build-share/static/js/main.a2a88453.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.267e4864.js"
+    "static/js/main.a2a88453.js"
   ]
 }
