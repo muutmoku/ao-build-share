@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AppBar, Toolbar, Container, Grid, Box, Button, MenuItem, Menu, Typography, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { AppBar, Toolbar, Container, Grid, Box, useMediaQuery, Button, useTheme, MenuItem, Menu, Typography, IconButton } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import EditIcon from '@mui/icons-material/Edit';
 import EditOffIcon from '@mui/icons-material/EditOff';
@@ -41,6 +41,7 @@ function getLangFromURL() {
 }
 
 export default function App() {
+  const theme = useTheme();
   const [lang, setLang] = useState(getLangFromURL());
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [buildState, setBuildState] = useState<BuildState | undefined>();
@@ -56,7 +57,8 @@ export default function App() {
     setAnchorEl(null);
   };
   const current = languages.find(l => l.code === lang) || languages.find(l => l.code === "EN-US");
-  React.useEffect(() => {
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("editor", editorEnabled ? "true" : "false");
     params.set("lang", lang || defaultLang);
@@ -79,7 +81,7 @@ export default function App() {
               minWidth: 56,
               letterSpacing: 1,
             }}
-            startIcon={<TranslateIcon />}
+            startIcon={isSmallScreen ? null : <TranslateIcon />}
             endIcon={<ArrowDropDownIcon />}
           >
             {current?.label}
