@@ -1,7 +1,6 @@
-// BuildEditor.tsx
 import React, { useEffect, useState } from "react";
 import { TextField, Grid, MenuItem } from "@mui/material";
-import ItemAutocomplete from "./ItemAutocomplete"; // slot, label, value, onChange, lang
+import ItemAutocomplete from "./ItemAutocomplete";
 
 export type SlotKey =
   | "head"
@@ -65,8 +64,6 @@ const defaultBuildSlots: BuildSlots = {
   bagEnchant: "",
 };
 
-// ================================
-// URL連携部分
 function encodeBuildToQuery(state: BuildState): string {
   const params = new URLSearchParams();
   params.set("title", state.title);
@@ -86,7 +83,6 @@ function decodeQueryToBuildState(query: string): BuildState {
   });
   return { title, desc, slots };
 }
-// ================================
 
 type Props = {
   lang: string;
@@ -94,7 +90,6 @@ type Props = {
 };
 
 const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
-  // 初期化
   const initialState = decodeQueryToBuildState(window.location.search.slice(1));
   const [title, setTitle] = useState(initialState.title);
   const [desc, setDesc] = useState(initialState.desc);
@@ -113,7 +108,6 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
     bag: {},
   });
 
-  // enchantMapロード
   useEffect(() => {
     const fetchAllEnchants = async () => {
       const result: EnchantMap = {
@@ -139,7 +133,6 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
           const map: Record<string, string[]> = {};
 
           for (const item of data) {
-            // uniqueNameのパース
             const match = item.uniqueName.match(/^T\d+_(.+?)(?:@(\d))?$/);
             if (!match) continue;
             const base = match[1];
@@ -150,7 +143,6 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
             } else {
               enchantSet.add(match[2] ?? "0");
             }
-            // enchantments内も見る
             if (
               item.enchantments &&
               Array.isArray(item.enchantments.enchantments)
@@ -179,12 +171,10 @@ const BuildEditor: React.FC<Props> = ({ lang, onChange }) => {
     fetchAllEnchants();
   }, []);
 
-  // 変更時：onChange発火、URL更新
   useEffect(() => {
     const newState: BuildState = { title, desc, slots: slotsState };
     if (onChange) onChange(newState);
 
-    // URL自動更新
     const query = encodeBuildToQuery(newState);
     const url = `${window.location.pathname}?${query}`;
     window.history.replaceState(null, "", url);
